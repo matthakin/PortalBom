@@ -9,7 +9,7 @@ include $file_root.'includes/session_user_edit_check.php';
 include $file_root.'includes/sql_connect.php';
 $permissible_page = "sense"; 
 include $file_root.'bom/bom.php';
-
+$uom = $_GET['uom'];
 $partnumber = $_GET['partnumber'];
 $description = $_GET['description'];
 $note = $_GET['note'];
@@ -83,7 +83,7 @@ if ($answer == -1)
     echo "Type: " . $type . "<br/>";
     echo "Active: " . $status . "<br/>";
     
-    addPartToDataBase($partnumber, $description, $type, $note, $servername, $username, $password, $dbname);
+    addPartToDataBase($partnumber, $description, $type, $note, $servername, $username, $password, $dbname, $uom);
 }
 
 ?>

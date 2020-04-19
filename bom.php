@@ -52,7 +52,7 @@ function doesPartExist($servername, $username, $password, $dbname, $num)
 }
 
 // Add a new part to the database
-function addPartToDataBase($pnum, $desc, $type, $note, $servername, $username, $password, $dbname)
+function addPartToDataBase($pnum, $desc, $type, $note, $servername, $username, $password, $dbname, $uom)
 {
     $last_id = 0;
     // Make sure part doesn't already exisy
@@ -66,7 +66,7 @@ function addPartToDataBase($pnum, $desc, $type, $note, $servername, $username, $
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "INSERT INTO `part` (`partid`, `type`, `partnumber`, `description`, `note`, `Active`) VALUES (NULL, '$type', '$pnum', '$desc', '$note', '\'yes\'')";
+    $sql = "INSERT INTO `part` (`partid`, `type`, `partnumber`, `description`, `note`, `Active`, `uom`) VALUES (NULL, '$type', '$pnum', '$desc', '$note', 'yes', '$uom')";
     
     if ($conn->query($sql) === FALSE)
     {
@@ -199,6 +199,74 @@ function getPartInfo($num,  $servername, $username, $password, $dbname)
 
     return $outputstring;
 }
+
+
+// If I can coax all the numbers out of SolidWorks or Fishbowl
+function readincsvfile($path, $servername, $username, $password, $dbname)
+{
+    $filesnotadded = "";
+    $completeBom = array();
+    $file = fopen($path, 'r') or die("Unable to open");
+
+    $fb_out2 = fgets($file);
+
+    fclose($file);
+
+    //echo $fb_out2 . "<br>";
+
+    $completeBom = explode("@", $fb_out2);
+
+    $TempString = "";
+
+    for ($r = 0;$r < count($completeBom) - 1;$r++)      
+    {
+
+        $line = array();
+        $line = explode('|', $completeBom[$r]);
+
+        $tempType = "";
+
+        if (substr($line[1],0,8) == "ASSEMBLY")
+        {
+            $tempType = 1;
+        }else if (substr($line[1], 0 ,8) == "WELDMENT")
+        {
+            $tempType = 2;
+        }else
+        {
+            $tempType = 0;
+        }
+
+
+        //return $line[0] . '\t' . $line[1] . '\t' . $tempType . '\t' . $line[2];
+
+        addPartToDataBase($line[0], $line[1], $tempType, 'import', $servername, $username, $password, $dbname, $line[2]);
+
+
+
+
+    }
+    
+    // Pull all lines of the csv into an array
+
+    // loop through each and pull the part number
+
+    // See if the number exists, if it doesn't, break apart
+    // and add the part to the database
+
+
+    return;
+}
+
+function testsubstring()
+{
+    $ass = "ASSEMBLY";
+    $weld = "WELDMENT";
+    $part = "Part";
+
+    return substr($ass,0,8);
+}
+
 
 //echo doesPartExist($servername, $username, $password, $dbname, "C5-11-16");
 //echo addPartToDataBase('0060836', 'PLATE, ACCESS, HEAT EXCHANGER COMPARTMENT', 0, 'Note:', $servername, $username, $password, $dbname) . "<br/>";

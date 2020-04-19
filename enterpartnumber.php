@@ -44,6 +44,50 @@ include $file_root.'bom/bom.php';
   <label for="note">Note:</label><br>
   <input type="text" id="note" name="note" value=""><br>
 
+
+<br/><br/><br/>
+
+  <label for="uom">Select the unit of measure:</label><br>
+  <label for="ea">ea</label>
+  <input type="radio" id="ea" name="uom" value="ea"  checked><br>
+  <label for="ft">ft</label>
+  <input type="radio" id="ft" name="uom" value="ft"><br>
+  <label for="in">in</label>
+  <input type="radio" id="in" name="uom" value="in"><br>
+  <label for="fl">fl</label>
+  <input type="radio" id="fl" name="uom" value="fl"><br>
+
+  <label for="gal">gal</label>
+  <input type="radio" id="gal" name="uom" value="gal"><br>
+
+  <label for="roll">roll</label>
+  <input type="radio" id="roll" name="uom" value="roll"><br>
+
+  <label for="fl">fl</label>
+  <input type="radio" id="fl" name="uom" value="fl"><br>
+
+  <label for="M">M</label>
+  <input type="radio" id="M" name="uom" value="M"><br>
+
+  <label for="mm">mm</label>
+  <input type="radio" id="mm" name="uom" value="mm"><br>
+
+  <label for="qt">qt</label>
+  <input type="radio" id="qt" name="uom" value="qt"><br>
+
+  <label for="ib">lb</label>
+  <input type="radio" id="lb" name="uom" value="lb"><br>
+
+  <label for="kg">kg</label>
+  <input type="radio" id="kg" name="uom" value="kg"><br>
+<br/><br/><br/>
+
+
+
+
+
+
+
   <label for="type">Select the part type:</label><br>
   <label for="Standard_Part">Part</label>
   <input type="radio" id="part" name="type" value="Standard_Part"  checked><br>

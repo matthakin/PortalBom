@@ -37,7 +37,7 @@ include $file_root.'bom/bom.php';
 <br/>
 
 
-
+<?php //readincsvfile("in.txt", $servername, $username, $password, $dbname); ?>
 
 
 
