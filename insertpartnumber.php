@@ -28,7 +28,7 @@ include $file_root.'bom/bom.php';
 <body style="font-family: Arial; padding: 10px; background: #f1f1f1;">
 
 <?php include $file_root.'includes/new_header.php'; ?>
-
+<a href="./bomhome.php">BOM app Home</a> <br/>
 
 
 

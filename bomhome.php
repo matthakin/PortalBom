@@ -28,11 +28,15 @@ include $file_root.'bom/bom.php';
 <body style="font-family: Arial; padding: 10px; background: #f1f1f1;">
 
 <?php include $file_root.'includes/new_header.php'; ?>
+<a href="./bomhome.php">BOM app Home</a> <br/>
+<?php //echo 'Part Info ' . getPartInfo('Z-137425', $servername, $username, $password, $dbname) . '<br/>'; ?>
 
-<?php echo 'Part Info ' . getPartInfo('Z-137425', $servername, $username, $password, $dbname) . '<br/>'; ?>
+<br/>
+<br/>
 
+<a href="./enterpartnumber.php">Enter Part Number</a> <br/>
 
-<h2 align="center" style="width: 100%;">Template</h2>
+<h2 align="center" style="width: 100%;">Engineering Bill of Material</h2>
 <br/>
 
 
