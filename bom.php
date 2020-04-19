@@ -21,7 +21,7 @@ This Will be on the web portal. runs with
 */
 
 $file_root = $_SERVER['DOCUMENT_ROOT']."/intranet/";
-include $file_root.'includes/sql_connect.php';
+include_once $file_root.'includes/sql_connect.php';
 
 // Function to see if a part exits in the database
 function doesPartExist($servername, $username, $password, $dbname, $num)
@@ -162,6 +162,35 @@ function printDrawing($num)
 function printAllDrawingsonSingleLevelBOM($num)
 {
     return;
+}
+
+// Returns a delimited string with the part number,
+// type, description, and note:
+function getPartInfo($num,  $servername, $username, $password, $dbname)
+{
+    $outputstring = "";
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $output = -1;
+    //Check connection
+    if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT * FROM part WHERE partnumber = '" . $num . "';";
+    $result = $conn->query($sql);
+
+    // Part exits
+    if ($result->num_rows > 0)
+    {
+        while ($row=$result->fetch_assoc())
+        {
+            $outputstring = $row['partid'] . "|" . $row['type'] . "|" . $row['partnumber'] . "|" . $row['description'] . "|" . $row['note'] . "|" . $row['Active'];
+        }
+    }
+    $conn->close();
+
+
+    return $outputstring;
 }
 
 //echo doesPartExist($servername, $username, $password, $dbname, "C5-11-16");
