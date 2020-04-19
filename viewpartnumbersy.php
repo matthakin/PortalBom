@@ -29,15 +29,13 @@ include $file_root.'bom/bom.php';
 
 <?php include $file_root.'includes/new_header.php'; ?>
 <a href="./bomhome.php">BOM app Home</a> <br/>
-<h2 align="center" style="width: 100%;">Engineering Bill of Material</h2>
+<h2 align="center" style="width: 100%;">Part Number List</h2>
 <br/>
-<?php //echo 'Part Info ' . getPartInfo('Z-137425', $servername, $username, $password, $dbname) . '<br/>'; ?>
+
 
 <br/>
 <br/>
 
-<a href="./enterpartnumber.php">Enter Part Number</a> <br/>
-<a href="./viewpartnumbersy.php">View Part Number Listing</a> <br/>
 
 
 

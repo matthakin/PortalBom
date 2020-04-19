@@ -27,29 +27,36 @@ include_once $file_root.'includes/sql_connect.php';
 function doesPartExist($servername, $username, $password, $dbname, $num)
 {
     // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    $output = -1;
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    $output = -10;
     //Check connection
-    if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    if ($conn2->connect_error) {
+    die("Connection failed: " . $conn2->connect_error);
     }
-    $sql = "SELECT * FROM part WHERE partnumber = '" . $num . "';";
-    $result = $conn->query($sql);
-
-    // Part exits
+    //$sql = "SELECT * FROM `part` WHERE `partnumber` = `" . $num . "`";
+    $sql = "SELECT * FROM part WHERE partnumber = '" . $num . "'";
+    $result = $conn2->query($sql);
+    
     if ($result->num_rows > 0)
+    {
+        $output = -1;
+    }else
     {
         $output = 1;
     }
-    $conn->close();
+
+    
+    
+    $conn2->close();
     return $output;
 }
 
 // Add a new part to the database
 function addPartToDataBase($pnum, $desc, $type, $note, $servername, $username, $password, $dbname)
 {
+    $last_id = 0;
     // Make sure part doesn't already exisy
-    if (doesPartExist($servername, $username, $password, $dbname, $pnum) == 1)
+    if (doesPartExist($servername, $username, $password, $dbname, $pnum) == -1)
     {
         return "Part already exits. <br/>";
     }
@@ -59,7 +66,7 @@ function addPartToDataBase($pnum, $desc, $type, $note, $servername, $username, $
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "INSERT INTO `part` (`partid`, `type`, `partnumber`, `description`, `note`) VALUES (NULL, '$type', '$pnum', '$desc', '$note')";
+    $sql = "INSERT INTO `part` (`partid`, `type`, `partnumber`, `description`, `note`, `Active`) VALUES (NULL, '$type', '$pnum', '$desc', '$note', '\'yes\'')";
     
     if ($conn->query($sql) === FALSE)
     {
@@ -69,7 +76,7 @@ function addPartToDataBase($pnum, $desc, $type, $note, $servername, $username, $
     }
     
     $conn->close();
-    return 0;
+    return $last_id;
 }
 
 // Set Part Numbers status to inactive

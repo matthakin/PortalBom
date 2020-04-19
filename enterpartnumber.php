@@ -37,16 +37,16 @@ include $file_root.'bom/bom.php';
 
 <form action="./insertpartnumber.php" method='GET'>
   <label for="partnumber">Part Number:</label><br>
-  <input type="text" id="partnumber" name="partnumber" value=""><br>
+  <input type="text" id="partnumber" name="partnumber" value="" required><br>
   <label for="lname">Description:</label><br>
-  <input type="text" id="description" name="discription" value=""><br>
+  <input type="text" id="description" name="description" value="" required><br>
 
   <label for="note">Note:</label><br>
   <input type="text" id="note" name="note" value=""><br>
 
   <label for="type">Select the part type:</label><br>
-  <label for="Standard Part">Part</label>
-  <input type="radio" id="part" name="type" value="Standard Part"  checked><br>
+  <label for="Standard_Part">Part</label>
+  <input type="radio" id="part" name="type" value="Standard_Part"  checked><br>
   <label for="Assembly">Assembly</label>
   <input type="radio" id="assembly" name="type" value="Assembly"><br>
   <label for="Weldment">Weldment</label>
@@ -55,8 +55,8 @@ include $file_root.'bom/bom.php';
   <label for="status">Select the part type:</label><br>
   <label for="Active">Active</label>
   <input type="radio" id="active" name="status" value="Active" checked><br>
-  <label for="Not Active">Not Active</label>
-  <input type="radio" id="notactive" name="status" value="Not Active"><br>
+  <label for="Not_Active">Not Active</label>
+  <input type="radio" id="notactive" name="status" value="Not_Active"><br>
   <input type="submit" value="Submit">
 </form>
 

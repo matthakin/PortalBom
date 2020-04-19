@@ -9,6 +9,37 @@ include $file_root.'includes/session_user_edit_check.php';
 include $file_root.'includes/sql_connect.php';
 $permissible_page = "sense"; 
 include $file_root.'bom/bom.php';
+
+$partnumber = $_GET['partnumber'];
+$description = $_GET['description'];
+$note = $_GET['note'];
+$tempstatus = $_GET['status'];
+$status = 'yes';
+if ($tempstatus == 'Active')
+{
+    $status = 'yes';
+}else
+{
+    $status = 'no';
+}
+
+$temptype = $_GET['type'];
+$type = -1;
+if ($temptype == 'Weldment')
+{
+    $type = 2;
+}else if ($temptype == 'Standard_Part')
+{
+    $type = 0;
+}else if ($temptype == 'Assembly')
+{
+    $type = 1;
+}
+
+$answer = doesPartExist($servername, $username, $password, $dbname, $partnumber);
+
+
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -30,10 +61,35 @@ include $file_root.'bom/bom.php';
 <?php include $file_root.'includes/new_header.php'; ?>
 <a href="./bomhome.php">BOM app Home</a> <br/>
 
+<?php
+if ($answer == -1)
+{
+    ?><h2 align="center" style="width: 100%;">Part Addition Failed</h2>
+<br/> <?php
+    echo "Part Has already been used. <br/>";
+    echo "Select part other than " . $partnumber . "<br/>";
+    echo "Description: " . $description . "<br/>";
+    echo "Note: " . $note . "<br/>";
+    echo "Type: " . $type . "<br/>";
+    echo "Active: " . $status . "<br/>";
+}else
+{
+    
+    ?><h2 align="center" style="width: 100%;">Part Addition Confirmed</h2>
+<br/> <?php
+    echo "Part Number: " . $partnumber . "<br/>";
+    echo "Description: " . $description . "<br/>";
+    echo "Note: " . $note . "<br/>";
+    echo "Type: " . $type . "<br/>";
+    echo "Active: " . $status . "<br/>";
+    
+    addPartToDataBase($partnumber, $description, $type, $note, $servername, $username, $password, $dbname);
+}
 
+?>
 
-<h2 align="center" style="width: 100%;">Under Construction</h2>
-<br/>
+<br/><br/><br/>
+
 
 
 
