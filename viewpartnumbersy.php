@@ -37,7 +37,22 @@ include $file_root.'bom/bom.php';
 <br/>
 
 
-<?php //readincsvfile("in.txt", $servername, $username, $password, $dbname); ?>
+<?php 
+
+$bom = getBOM('0060750', $servername, $username, $password, $dbname); 
+$lines = array();
+$lines = explode('@',$bom);
+
+for ($i = 0; $i < count($lines); $i++)
+{
+
+echo $lines[$i] . "<br/>";
+
+}
+
+
+
+?>
 
 
 

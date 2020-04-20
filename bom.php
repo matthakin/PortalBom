@@ -24,6 +24,8 @@ $file_root = $_SERVER['DOCUMENT_ROOT']."/intranet/";
 include_once $file_root.'includes/sql_connect.php';
 
 // Function to see if a part exits in the database
+// If the part is in the database return -1
+// If it is not return 1
 function doesPartExist($servername, $username, $password, $dbname, $num)
 {
     // Create connection
@@ -103,19 +105,49 @@ function createBillOfMaterial($parentno, $childno, $qty, $servername, $username,
     // If the parent and child aleady exit in the database, Exit
     if (CheckBOMForParentChildPair($parentno, $childno, $servername, $username, $password, $dbname))
     {
-        return -1;
+        return 0;
     }
 
     // Part can only be a type 1 or 2 assembly or Weldment
     if (getPartType($parentno) == 0)
     {
-        return "Part must be either an assmebly or weldment <br/>";
+        return 0;
+    }else
+    {
+        insrtBOMline($parentno, $childno, $qty, $servername, $username, $password, $dbname);
     }
     // Add component to Bill of Material
     
-    return 0;
+    return 1;
 }
 
+// Insert item into Bill of Material
+function insrtBOMline($parent, $child, $qty, $servername, $username, $password, $dbname)
+{
+    // Create connection
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    //Check connection
+    if ($conn2->connect_error)
+    {
+        die("Connection failed: " . $conn2->connect_error);
+    }else
+    {
+        //echo "Success!!";
+    }
+    //Create Insert Query
+    $query = "INSERT INTO `bom` (`seqid`, `parentnum`, `childnum`, `qty`) VALUES (NULL, '$parent', '$child', $qty)";
+    //Check Query Status
+    if ($conn2->query($query) === FALSE)
+    {
+        echo "Error: " . $query . "
+    " . $conn2->error;
+    } else {
+        $last_id = $conn2->insert_id;
+    }
+    //Close Connection
+    $conn2->close();
+    return 0;
+}
 // Remove part from a bill of material
 function removePartFromBOM($parentno, $childno, $servername, $username, $password, $dbname)
 {
@@ -125,7 +157,34 @@ function removePartFromBOM($parentno, $childno, $servername, $username, $passwor
 // before adding a part to a bom, make sure that pair doesn't already exit
 function CheckBOMForParentChildPair($parent, $child, $servername, $username, $password, $dbname)
 {
-    return -1;
+    // init output variable
+    $outputstring = "";
+
+    // Create connection
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    //Check connection
+    if ($conn2->connect_error) {
+        die("Connection failed: " . $conn2->connect_error);
+    }
+    // SQL
+    $sql = "SELECT * FROM `bom` WHERE `parentnum` = '$parent' AND `childnum` = '$child'";
+    $result = $conn2->query($sql);
+    $num_rows = mysqli_num_rows($result);
+    while($row = $result->fetch_assoc())
+    {
+        $outputstring = $row['childnum'];
+    }
+    $conn2->close();
+
+    if ($outputstring == $child)
+    {
+        return 1;
+    }else
+    {
+        return 0;
+    }
+
+    
 }
 
 function PrintSingleLevelBOM($parentno, $servername, $username, $password, $dbname)
@@ -164,7 +223,6 @@ function printDrawing($num)
     return;
 }
 
-
 // Find and print all drawings associated with it at one level
 function printAllDrawingsonSingleLevelBOM($num)
 {
@@ -177,14 +235,14 @@ function getPartInfo($num,  $servername, $username, $password, $dbname)
 {
     $outputstring = "";
     // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
     $output = -1;
     //Check connection
-    if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    if ($conn2->connect_error) {
+    die("Connection failed: " . $conn2->connect_error);
     }
     $sql = "SELECT * FROM part WHERE partnumber = '" . $num . "';";
-    $result = $conn->query($sql);
+    $result = $conn2->query($sql);
 
     // Part exits
     if ($result->num_rows > 0)
@@ -194,14 +252,145 @@ function getPartInfo($num,  $servername, $username, $password, $dbname)
             $outputstring = $row['partid'] . "|" . $row['type'] . "|" . $row['partnumber'] . "|" . $row['description'] . "|" . $row['note'] . "|" . $row['Active'];
         }
     }
-    $conn->close();
+    $conn2->close();
 
 
     return $outputstring;
 }
 
+// will return delimated string with each line on the bom and qty.
+function getBOM($assemblyNum, $servername, $username, $password, $dbname)
+{
+    $outstring = "";
 
-// If I can coax all the numbers out of SolidWorks or Fishbowl
+
+    $sql = "SELECT * FROM `bom` WHERE `parentnum` = '$assemblyNum'";
+    // Create connection
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    //Check connection
+    if ($conn2->connect_error) {
+        die("Connection failed: " . $conn2->connect_error);
+    }
+    
+    $result = $conn2->query($sql);
+    $num_rows = mysqli_num_rows($result);
+    while($row = $result->fetch_assoc())
+    {
+        $tempChild = $row['childnum'];
+        $tempDescription = getPartDescription($tempChild , $servername, $username, $password, $dbname);
+        $outstring = $outstring . $tempChild . '|' . $tempDescription . '|' . $row['qty'] . '@';
+    }
+
+
+    return $outstring;
+}
+
+function getPartDescription($num, $servername, $username, $password, $dbname)
+{
+    $outstring = "";
+
+    $sql = "SELECT * FROM `part` WHERE `partnumber` = '$num'";
+    // Create connection
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    //Check connection
+    if ($conn2->connect_error) {
+        die("Connection failed: " . $conn2->connect_error);
+    }
+    
+    $result = $conn2->query($sql);
+    $num_rows = mysqli_num_rows($result);
+    while($row = $result->fetch_assoc())
+    {
+        
+        $outstring = $row['description'];
+    }
+
+    return $outstring;
+}
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php 
+
+function buildBOMs($path, $servername, $username, $password, $dbname)
+{
+    // 1. Load the file
+    $filesnotadded = "";
+    $completeBom = array();
+    $file = fopen($path, 'r') or die("Unable to open");
+
+    $fb_out2 = fgets($file);
+
+    fclose($file);
+
+    //echo $fb_out2 . "<br>";
+
+    $completeBom = explode("@", $fb_out2);
+
+    $TempString = "";
+
+    for ($r = 0;$r < count($completeBom) - 1;$r++)      
+    {
+        // 2. Move through list one at a time
+        //      Split the line into its three parts
+        //      its parent, child and quanity
+        $line = array();
+        $line = explode('|', $completeBom[$r]);
+
+    
+        // 3. Find the id of both the parent and the chil
+        $parentid = $line[0];
+        $childid = $line[1];
+        $qty = floatval($line[2]);
+        if (doesPartExist($servername, $username, $password, $dbname, $parentid) == -1 && doesPartExist($servername, $username, $password, $dbname, $childid) == -1)
+        {
+        // 4. If the parent of the child do not exist
+        //      log the part number to a file
+        // 5. add the parent, child and quanity to the bom
+            createBillOfMaterial($parentid, $childid, $qty, $servername, $username, $password, $dbname);
+
+        }else
+        {
+            $myfile = fopen("log.txt", "a") or die("Unable to open file!");
+            $txt = $parentid . '|' . $childid . '|' . $qty . '|' . "\n";
+            fwrite($myfile, $txt);
+            
+            fclose($myfile);
+        }
+
+    }
+
+    
+    return count($completeBom);
+}
+
+/ If I can coax all the numbers out of SolidWorks or Fishbowl
 function readincsvfile($path, $servername, $username, $password, $dbname)
 {
     $filesnotadded = "";
@@ -243,8 +432,6 @@ function readincsvfile($path, $servername, $username, $password, $dbname)
         addPartToDataBase($line[0], $line[1], $tempType, 'import', $servername, $username, $password, $dbname, $line[2]);
 
 
-
-
     }
     
     // Pull all lines of the csv into an array
@@ -258,16 +445,4 @@ function readincsvfile($path, $servername, $username, $password, $dbname)
     return;
 }
 
-function testsubstring()
-{
-    $ass = "ASSEMBLY";
-    $weld = "WELDMENT";
-    $part = "Part";
-
-    return substr($ass,0,8);
-}
-
-
-//echo doesPartExist($servername, $username, $password, $dbname, "C5-11-16");
-//echo addPartToDataBase('0060836', 'PLATE, ACCESS, HEAT EXCHANGER COMPARTMENT', 0, 'Note:', $servername, $username, $password, $dbname) . "<br/>";
 ?>
