@@ -9,19 +9,6 @@ include $file_root.'includes/session_user_edit_check.php';
 include $file_root.'includes/sql_connect.php';
 $permissible_page = "sense"; 
 include $file_root.'bom/bom.php';
-
-$assno = "";
-$assdec = "";
-
-if (isset($_GET['assno']))
-{
-    $assno = $_GET['assno'];
-}
- 
-     
-
-
-
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -42,43 +29,29 @@ if (isset($_GET['assno']))
 
 <?php include $file_root.'includes/new_header.php'; ?>
 <a href="./bomhome.php">BOM app Home</a> <br/>
-<h2 align="center" style="width: 100%;">Enter BOM</h2>
+<h2 align="center" style="width: 100%;">Test Page</h2>
 <br/>
 
-<?php if ($assno == "") {?>
-<form action="./createbom.php" method = 'GET'>
-  <label for="assno">Assembly Number:</label><br>
-  <input type="text" id="assno" name="assno" value=""><br>
-  <input type="submit" value="Submit">
-</form> 
-
-<?php  } else { ?>
 
 <br/>
+<br/>
 
-<form action="./insertbomline.php" method = 'GET'>
-<label for="assno">Assembly Number:</label><br>
-  <input type="text" id="assno" name="assno" value='<?php echo $assno ?>' readonly><br>
-  <label for="pn">Part To Add:</label><br>
-  <input type="text" id="pn" name="pn" value=""><br>
-  <input type="submit" value="Submit">
-</form> 
 
-<?php
+<?php 
 
 
 
-    $bom = getBOM($assno, $servername, $username, $password, $dbname); 
-    $lines = array();
-    $lines = explode('@',$bom);
 
-    for ($i = 0; $i < count($lines); $i++)
-    {
-        echo $lines[$i] . "<br/>";
-    }
 
 ?>
-<?php  }?>
+
+
+
+
+
+
+
+
 
 <div class="row">
 
