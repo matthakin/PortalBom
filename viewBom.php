@@ -9,6 +9,10 @@ include $file_root.'includes/session_user_edit_check.php';
 include $file_root.'includes/sql_connect.php';
 $permissible_page = "sense"; 
 include $file_root.'bom/bom.php';
+$assno = "";
+$asdec = "";
+if (isset($_GET['assno'])){ $assno = $_GET['assno'];}
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -29,30 +33,45 @@ include $file_root.'bom/bom.php';
 
 <?php include $file_root.'includes/new_header.php'; ?>
 <a href="./bomhome.php">BOM app Home</a> <br/>
-<h2 align="center" style="width: 100%;">Part Number List</h2>
+<h2 align="center" style="width: 100%;">View BOM</h2>
 <br/>
 
+<?php if ($assno == "") {?>
 
+<form action="./viewBom.php" method = 'GET'>
+  <label for="assno">Assembly Number:</label><br>
+  <input type="text" id="assno" name="assno" value=""><br>
+  <input type="submit" value="Submit">
+</form> 
+<?php } else {?>
+
+<?php
+echo "Assembly Number: " . $assno . "<br/>";
+
+$bom = getBOM($assno, $servername, $username, $password, $dbname); 
+$lines = array();
+$lines = explode('@',$bom);
+
+for ($i = 0; $i < count($lines); $i++)
+{
+
+echo $lines[$i] . "<br/>";
+
+}
+
+
+
+
+?>
+
+
+
+<?php } ?>
 <br/>
 <br/>
 
 
 <?php 
-
-// Create connection
-$conn2 = new mysqli($servername, $username, $password, $dbname);
-//Check connection
-if ($conn2->connect_error) {
-    die("Connection failed: " . $conn2->connect_error);
-}
-// SQL
-$sql = "SELECT * FROM part ORDER BY partnumber";
-$result = $conn2->query($sql);
-$num_rows = mysqli_num_rows($result);
-while($row = $result->fetch_assoc())
-{
-    echo $row['partnumber'] . "\t\t" . $row['description'] . "\t\t" . $row['uom'] . "<br/>";
-}
 
 
 

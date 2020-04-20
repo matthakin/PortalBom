@@ -29,35 +29,12 @@ include $file_root.'bom/bom.php';
 
 <?php include $file_root.'includes/new_header.php'; ?>
 <a href="./bomhome.php">BOM app Home</a> <br/>
-<h2 align="center" style="width: 100%;">Part Number List</h2>
+<h2 align="center" style="width: 100%;">Enter BOM</h2>
 <br/>
 
 
 <br/>
 <br/>
-
-
-<?php 
-
-// Create connection
-$conn2 = new mysqli($servername, $username, $password, $dbname);
-//Check connection
-if ($conn2->connect_error) {
-    die("Connection failed: " . $conn2->connect_error);
-}
-// SQL
-$sql = "SELECT * FROM part ORDER BY partnumber";
-$result = $conn2->query($sql);
-$num_rows = mysqli_num_rows($result);
-while($row = $result->fetch_assoc())
-{
-    echo $row['partnumber'] . "\t\t" . $row['description'] . "\t\t" . $row['uom'] . "<br/>";
-}
-
-
-
-?>
-
 
 
 

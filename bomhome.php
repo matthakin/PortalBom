@@ -38,7 +38,8 @@ include $file_root.'bom/bom.php';
 
 <a href="./enterpartnumber.php">Enter Part Number</a> <br/>
 <a href="./viewpartnumbersy.php">View Part Number Listing</a> <br/>
-
+<a href="./viewBom.php">View BOM</a> <br/>
+<a href="./createbom.php">Create/Edit BOM</a> <br/>
 
 
 

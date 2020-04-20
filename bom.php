@@ -390,7 +390,7 @@ function buildBOMs($path, $servername, $username, $password, $dbname)
     return count($completeBom);
 }
 
-/ If I can coax all the numbers out of SolidWorks or Fishbowl
+// If I can coax all the numbers out of SolidWorks or Fishbowl
 function readincsvfile($path, $servername, $username, $password, $dbname)
 {
     $filesnotadded = "";
