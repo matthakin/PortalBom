@@ -56,30 +56,60 @@ if (isset($_GET['assno']))
 
 <br/>
 
-<form action="./insertbomline.php" method = 'GET'>
-<label for="assno">Assembly Number:</label><br>
-  <input type="text" id="assno" name="assno" value='<?php echo $assno ?>' readonly><br>
-  <label for="pn">Part To Add:</label><br>
-  <input type="text" id="pn" name="pn" value=""><br>
-  <input type="submit" value="Submit">
-</form> 
 
+<table border="2" cellpadding="5" cellspacing="0" align="center">
+    <tr><th>Part Number</th><th>Description</th><th>QTY</th><th>Type</th><th>Remove</th></tr>
 <?php
 
 
+
+    echo "<tr bgcolor='GRAY'><td><b>" . $assno . "</b></td><td>" . getPartDescription($assno, $servername, $username, $password, $dbname) . "</td><td>00</td><td>ASSEMBLY</td><td>#####</td></tr>";
 
     $bom = getBOM($assno, $servername, $username, $password, $dbname); 
     $lines = array();
     $lines = explode('@',$bom);
 
-    for ($i = 0; $i < count($lines); $i++)
+    for ($i = 0; $i < count($lines) - 1; $i++)
     {
-        echo $lines[$i] . "<br/>";
+
+        $parts = array();
+
+    $parts = explode('|',$lines[$i]);
+
+    if ($parts[3] == "ASSEMBLY")
+    {
+        $partassembly = $parts[0];
+        Echo "<tr><td><a href='viewBom.php?assno=" . $partassembly . "'>$partassembly</a></td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='#'>Remove</a></td></tr>";
+    }else
+    {
+        Echo "<tr><td>" . $parts[0] . "</td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='#'>Remove</a></td></tr>";
     }
 
-?>
-<?php  }?>
 
+
+
+    }
+
+
+    echo "</table>";
+
+?>
+<?php  }
+
+?>
+<br/>
+<div align="center">
+<form action="./insertbomline.php" method = 'GET'>
+  <label for="pn">Part To Add:</label>
+  <input  type="text" id="pn" name="pn" size="50" value="" required>
+  <label for="desc">Description:</label>
+  <input type="text" id="desc" name="desc" size="80" value="" required>
+  <label for="qty">Quantity:</label>
+  <input type="number" id="qty" name="qty" size="20" value="0" required><br>
+  <input type="submit" value="Submit">
+</form> 
+</div>
+<br/>
 <div class="row">
 
     <div class="leftcolumn">

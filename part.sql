@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2020 at 09:18 PM
+-- Generation Time: Apr 21, 2020 at 04:37 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -932,7 +932,9 @@ INSERT INTO `part` (`partid`, `type`, `partnumber`, `description`, `note`, `Acti
 (903, 0, '7132K519', 'HEAT SHRINK, CLEAR, 1IN ID BEFORE SHRINKING, 1/2 FOOT LENGTH', 'import', 'yes', 'PK5'),
 (904, 0, '7132K523', 'HEAT SHRINK, CLEAR, 3IN ID BEFORE SHRINKING, 1/2 FOOT LENGTH', 'import', 'yes', 'PK5'),
 (905, 0, '0061425', 'PROCEDURE, ELECTRICAL INSTALL, MCRRS', 'import', 'yes', 'ea'),
-(906, 0, '1279N81', 'WEATHER=-RESISTANT HIGH TEM SILLICONE FOAM STRIP 3/4 WIDE, 3/8 THICK , 10 LONG', 'import', 'yes', 'ea');
+(906, 0, '1279N81', 'WEATHER=-RESISTANT HIGH TEM SILLICONE FOAM STRIP 3/4 WIDE, 3/8 THICK , 10 LONG', 'import', 'yes', 'ea'),
+(907, 2, '0061457', 'WELDMENT, TANK TOP, MCV', 'new', 'yes', 'ea'),
+(908, 1, '0061550', '	ASSEMBLY, 488C INLINE PTO_ CREEPER DRIVE', 'Added from PN tool', 'yes', 'ea');
 
 --
 -- Indexes for dumped tables
@@ -952,7 +954,7 @@ ALTER TABLE `part`
 -- AUTO_INCREMENT for table `part`
 --
 ALTER TABLE `part`
-  MODIFY `partid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=907;
+  MODIFY `partid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=909;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

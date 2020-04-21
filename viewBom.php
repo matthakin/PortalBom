@@ -26,6 +26,8 @@ if (isset($_GET['assno'])){ $assno = $_GET['assno'];}
         padding: 10px;
         background: #f1f1f1;
         }
+
+        
 </style>
 </head>
 
@@ -43,30 +45,49 @@ if (isset($_GET['assno'])){ $assno = $_GET['assno'];}
   <input type="text" id="assno" name="assno" value=""><br>
   <input type="submit" value="Submit">
 </form> 
-<?php } else {?>
+<br/>
 
+
+<?php } else {?>
+    <table border="2" cellpadding="5" cellspacing="0" align="center">
+    <tr><th>Part Number</th><th>Description</th><th>QTY</th><th>Type</th><th>Drawing</th></tr>
 <?php
-echo "Assembly Number: " . $assno . "<br/>";
+echo "<tr bgcolor='GRAY'><td><b>" . $assno . "</b></td><td><b>" . getPartDescription($assno, $servername, $username, $password, $dbname) . "</b></td><td>00</td><td>ASSEMBLY</td><td><a href='#'>Draw</a></td></tr>";
 
 $bom = getBOM($assno, $servername, $username, $password, $dbname); 
 $lines = array();
 $lines = explode('@',$bom);
 
-for ($i = 0; $i < count($lines); $i++)
+for ($i = 0; $i < count($lines) - 1; $i++)
 {
 
-echo $lines[$i] . "<br/>";
+    $parts = array();
 
+$parts = explode('|',$lines[$i]);
+
+if ($parts[3] == "ASSEMBLY")
+{
+    $partassembly = $parts[0];
+    Echo "<tr><td><a href='viewBom.php?assno=" . $partassembly . "'>$partassembly</a></td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='#'>Draw</a></td></tr>";
+}else
+{
+    Echo "<tr><td>" . $parts[0] . "</td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='#'>Draw</a></td></tr>";
 }
 
 
 
+
+}
+
+
+echo "</table>";
 
 ?>
 
 
 
 <?php } ?>
+
 <br/>
 <br/>
 

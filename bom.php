@@ -263,8 +263,9 @@ function getBOM($assemblyNum, $servername, $username, $password, $dbname)
 {
     $outstring = "";
 
+    $sql =  "SELECT bom1.childnum, part.description, part.type, part.note, part.Active, bom1.qty FROM (SELECT * FROM bom WHERE parentnum = '$assemblyNum') AS bom1 INNER JOIN part ON bom1.childnum = part.partnumber;";
 
-    $sql = "SELECT * FROM `bom` WHERE `parentnum` = '$assemblyNum'";
+    //$sql = "SELECT * FROM `bom` WHERE `parentnum` = '$assemblyNum'";
     // Create connection
     $conn2 = new mysqli($servername, $username, $password, $dbname);
     //Check connection
@@ -277,8 +278,26 @@ function getBOM($assemblyNum, $servername, $username, $password, $dbname)
     while($row = $result->fetch_assoc())
     {
         $tempChild = $row['childnum'];
-        $tempDescription = getPartDescription($tempChild , $servername, $username, $password, $dbname);
-        $outstring = $outstring . $tempChild . '|' . $tempDescription . '|' . $row['qty'] . '@';
+        $tempDescription = $row['description'];
+
+        $type = $row['type'];
+
+        $stringtype = "";
+
+        if ($type == 0){
+            $stringtype = "PART";
+        }elseif($type == 1){
+            $stringtype = "ASSEMBLY";
+        }elseif($type == 2)
+        {
+            $stringtype = "WELDMENT";
+        }else
+        {
+            $stringtype = 'unknown';
+        }
+
+        //$tempDescription = getPartDescription($tempChild , $servername, $username, $password, $dbname);
+        $outstring = $outstring . $tempChild . '|' . $tempDescription . '|' . $row['qty'] . "|" . $stringtype . '@';
     }
 
 

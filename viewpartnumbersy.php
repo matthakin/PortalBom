@@ -49,17 +49,24 @@ if ($conn2->connect_error) {
 $sql = "SELECT * FROM part ORDER BY partnumber";
 $result = $conn2->query($sql);
 $num_rows = mysqli_num_rows($result);
+?>
+<table border="2" cellpadding="5" cellspacing="0" align="center">
+<tr bgcolor='GRAY'><th>Part Number</th><th>Description</th><th>uom</th><th>Draw</th><th>Edit</th></tr>
+<?php
 while($row = $result->fetch_assoc())
 {
-    echo $row['partnumber'] . "\t\t" . $row['description'] . "\t\t" . $row['uom'] . "<br/>";
+
+  echo "<tr><td>" . $row['partnumber'] . "</td><td>" . $row['description'] . "</td><td>" . $row['uom'] . "</td><td><a href='#'>Draw</a></td><td><a href='#'>EDIT</a></td></tr>";
+
+   
+   // echo $row['partnumber'] . "\t\t" . $row['description'] . "\t\t" . $row['uom'] . "<br/>";
 }
-
-
-
 ?>
 
+</table>
 
-
+<br/>
+<br/>
 
 
 
