@@ -99,6 +99,8 @@ function getPartType($num)
     return -1;
 }
 
+
+
 // Create a new bom or add part to exiting BOM
 function createBillOfMaterial($parentno, $childno, $qty, $servername, $username, $password, $dbname)
 {
@@ -151,7 +153,33 @@ function insrtBOMline($parent, $child, $qty, $servername, $username, $password, 
 // Remove part from a bill of material
 function removePartFromBOM($parentno, $childno, $servername, $username, $password, $dbname)
 {
-    return -1;
+    // Create connection
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    //Check connection
+    if ($conn2->connect_error)
+    {
+        die("Connection failed: " . $conn2->connect_error);
+    }else
+    {
+        //echo "Success!!";
+    }
+    //Create Insert Query
+    $query = "DELETE FROM `bom` WHERE `childnum` = '$childno' and `parentnum` = '$parentno'";
+    //Check Query Status
+    if ($conn2->query($query) === FALSE)
+    {
+        
+    //Close Connection
+    $conn2->close();
+    return "Error: " . $query . " " . $conn2->error;
+    } else {
+        $last_id = $conn2->insert_id;
+        //Close Connection
+    $conn2->close();
+        return $last_id;
+    }
+    
+    
 }
 
 // before adding a part to a bom, make sure that pair doesn't already exit
@@ -322,6 +350,29 @@ function getPartDescription($num, $servername, $username, $password, $dbname)
     {
         
         $outstring = $row['description'];
+    }
+
+    return $outstring;
+}
+
+function getlistofPartNumbers($servername, $username, $password, $dbname)
+{
+    $outstring = "";
+
+    $sql = "SELECT * FROM `part`";
+    // Create connection
+    $conn2 = new mysqli($servername, $username, $password, $dbname);
+    //Check connection
+    if ($conn2->connect_error) {
+        die("Connection failed: " . $conn2->connect_error);
+    }
+    
+    $result = $conn2->query($sql);
+    $num_rows = mysqli_num_rows($result);
+    while($row = $result->fetch_assoc())
+    {
+        
+        $outstring = $outstring . $row['partnumber'] . '|';
     }
 
     return $outstring;

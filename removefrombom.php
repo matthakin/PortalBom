@@ -7,8 +7,10 @@ $file_root = $_SERVER['DOCUMENT_ROOT']."/intranet/";
 //Edit Check
 include $file_root.'includes/session_user_edit_check.php';
 include $file_root.'includes/sql_connect.php';
-$permissible_page = "docs"; 
+$permissible_page = "sense"; 
 include $file_root.'bom/bom.php';
+$assno  = "";
+$childno = "";
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -29,45 +31,34 @@ include $file_root.'bom/bom.php';
 
 <?php include $file_root.'includes/new_header.php'; ?>
 <a href="./bomhome.php">BOM app Home</a> <br/>
-<h2 align="center" style="width: 100%;">Part Number List</h2>
+<h2 align="center" style="width: 100%;">Remove Item From bom</h2>
 <br/>
 
 
 <br/>
 <br/>
 
-
-<?php 
-
-// Create connection
-$conn2 = new mysqli($servername, $username, $password, $dbname);
-//Check connection
-if ($conn2->connect_error) {
-    die("Connection failed: " . $conn2->connect_error);
-}
-// SQL
-$sql = "SELECT * FROM part ORDER BY partnumber";
-$result = $conn2->query($sql);
-$num_rows = mysqli_num_rows($result);
-?>
-<table border="2" cellpadding="5" cellspacing="0" align="center">
-<tr bgcolor='GRAY'><th><a href='#'>^</a></th><th>Part Number</th><th>Description</th><th>uom</th><th>Draw</th><th>Edit</th></tr>
 <?php
-while($row = $result->fetch_assoc())
+
+if (isset($_GET['childno'])) { $childno = $_GET['childno'];  }
+if (isset($_GET['assno'])) { $assno = $_GET['assno'];}
+
+
+if ($childno != "" && $assno != ""){
+ echo removePartFromBOM($assno, $childno, $servername, $username, $password, $dbname) . "<br/>";
+
+ echo "Success, You have deleted " . $childno . " from aassembly " . $assno . "<br/>";
+ echo "<a href='./createbom.php?assno=" . $assno . "'>Return</a><br/>";
+
+}else
 {
-
-  echo "<tr><th><a href='#'>^</a><td>" . $row['partnumber'] . "</td><td>" . $row['description'] . "</td><td>" . $row['uom'] . "</td><td><a href='#'>Draw</a></td><td><a href='#'>EDIT</a></td></tr>";
-
-   
-   // echo $row['partnumber'] . "\t\t" . $row['description'] . "\t\t" . $row['uom'] . "<br/>";
+    echo "Error!!  Part want not deleted <br/>";
+    echo "<a href='./createbom.php?assno=" . $assno . "'>Return</a><br/>";
 }
+
+
+
 ?>
-
-</table>
-
-<br/>
-<br/>
-
 
 
 

@@ -12,13 +12,26 @@ include $file_root.'bom/bom.php';
 
 $assno = "";
 $assdec = "";
+$tempstr = getlistofPartNumbers($servername, $username, $password, $dbname);
+$numbs = array();
+$numbs = explode('|', $tempstr);
+$parts = array();
+if (isset($_GET['assno'])){ 
 
-if (isset($_GET['assno']))
-{
     $assno = $_GET['assno'];
-}
- 
-     
+
+    $temp = getPartInfo($assno, $servername, $username, $password, $dbname);
+    
+
+    $parts = explode('|', $temp);
+
+    if ($parts[1] != "1" && $parts[1] != "2")
+    {
+        $assno = "";
+        echo "You must select an assembly to add a bill " . $parts[1] . "  <br/>";
+    }
+
+}  
 
 
 
@@ -61,6 +74,8 @@ if (isset($_GET['assno']))
     <tr><th>Part Number</th><th>Description</th><th>QTY</th><th>Type</th><th>Remove</th></tr>
 <?php
 
+if (doesPartExist($servername, $username, $password, $dbname, $assno) == -1)
+{
 
 
     echo "<tr bgcolor='GRAY'><td><b>" . $assno . "</b></td><td>" . getPartDescription($assno, $servername, $username, $password, $dbname) . "</td><td>00</td><td>ASSEMBLY</td><td>#####</td></tr>";
@@ -79,10 +94,10 @@ if (isset($_GET['assno']))
     if ($parts[3] == "ASSEMBLY")
     {
         $partassembly = $parts[0];
-        Echo "<tr><td><a href='viewBom.php?assno=" . $partassembly . "'>$partassembly</a></td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='#'>Remove</a></td></tr>";
+        Echo "<tr><td><a href='viewBom.php?assno=" . $partassembly . "'>$partassembly</a></td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='./removefrombom.php?childno=" . $parts[0] . "&assno=" . $assno . "'>Remove</a></td></tr>";
     }else
     {
-        Echo "<tr><td>" . $parts[0] . "</td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='#'>Remove</a></td></tr>";
+        Echo "<tr><td>" . $parts[0] . "</td><td>" . $parts[1] . "</td><td>" . $parts[2] . "</td><td>" . $parts[3] . "</td><td><a href='./removefrombom.php?childno=" . $parts[0] . "&assno=" . $assno . "'>Remove</a></td></tr>";
     }
 
 
@@ -93,19 +108,32 @@ if (isset($_GET['assno']))
 
     echo "</table>";
 
-?>
-<?php  }
-
-?>
+    ?>
 <br/>
 <div align="center">
 <form action="./insertbomline.php" method = 'GET'>
+
+
+
   <label for="pn">Part To Add:</label>
-  <input  type="text" id="pn" name="pn" size="50" value="" required>
-  <label for="desc">Description:</label>
-  <input type="text" id="desc" name="desc" size="80" value="" required>
+  <!-- <input  type="text" id="pn" name="pn" size="50" value="" required> -->
+
+  <input list="partnum" size="25" style="font-size: 18px;" name = "partnum">
+    <datalist id='partnum' >
+    <?php
+    
+    for ($i = 0;$i < count($numbs) - 1; $i++)
+    {
+        echo "<option value=" . $numbs[$i] . ">";
+    }
+
+    ?>
+    </datalist>
+
   <label for="qty">Quantity:</label>
-  <input type="number" id="qty" name="qty" size="20" value="0" required><br>
+  <input type="number" id="qty" name="qty" size="20" value="" required><br>
+  <input type="hidden" name="assno" value= <?php echo $assno ?>>
+
   <input type="submit" value="Submit">
 </form> 
 </div>
@@ -125,8 +153,22 @@ if (isset($_GET['assno']))
 
 </div>
 
+    <?
+    
+}else
+{
+    echo "Part Number does not exist. Please add assembly number then create Bill of Material <br/>";
+    echo "<a href='./bomhome.php'>Return</a> <br/>";
+}
+?>
+<?php  }
+
+?>
+
+
 
 <?php include $file_root.'includes/foot.php'; ?>
 
 </body>
+
 </html>

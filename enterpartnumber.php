@@ -34,54 +34,37 @@ include $file_root.'bom/bom.php';
 
 <h2 align="center" style="width: 100%;">Enter a new Part Number Here.</h2>
 <br/>
-
+<div align="center">
 <form action="./insertpartnumber.php" method='GET'>
   <label for="partnumber">Part Number:</label><br>
   <input type="text" id="partnumber" name="partnumber" value="" required><br>
   <label for="lname">Description:</label><br>
-  <input type="text" id="description" name="description" value="" required><br>
+  <input type="text" size="100" id="description" name="description" value="" required><br>
 
   <label for="note">Note:</label><br>
-  <input type="text" id="note" name="note" value=""><br>
+  <input type="text" size="100" id="note" name="note" value="">
+        <br/>
+        <br/>
 
 
-<br/><br/><br/>
+  <label for="uom">Select Unit of Measure:</label><br>
+  <input list="uom" size="10" style="font-size: 18px;" name = "uom">
+  <datalist id='uom'>
+  <option value="ea">
+  <option value="ft">
+  <option value="in">
+  <option value="fl">
+  <option value="gal">
+  <option value="roll">
+  <option value="M">
+  <option value="mm">
+  <option value="qt">
+  <option value="lb">
+  <option value="kg">
+  </datalist>
 
-  <label for="uom">Select the unit of measure:</label><br>
-  <label for="ea">ea</label>
-  <input type="radio" id="ea" name="uom" value="ea"  checked><br>
-  <label for="ft">ft</label>
-  <input type="radio" id="ft" name="uom" value="ft"><br>
-  <label for="in">in</label>
-  <input type="radio" id="in" name="uom" value="in"><br>
-  <label for="fl">fl</label>
-  <input type="radio" id="fl" name="uom" value="fl"><br>
-
-  <label for="gal">gal</label>
-  <input type="radio" id="gal" name="uom" value="gal"><br>
-
-  <label for="roll">roll</label>
-  <input type="radio" id="roll" name="uom" value="roll"><br>
-
-  <label for="fl">fl</label>
-  <input type="radio" id="fl" name="uom" value="fl"><br>
-
-  <label for="M">M</label>
-  <input type="radio" id="M" name="uom" value="M"><br>
-
-  <label for="mm">mm</label>
-  <input type="radio" id="mm" name="uom" value="mm"><br>
-
-  <label for="qt">qt</label>
-  <input type="radio" id="qt" name="uom" value="qt"><br>
-
-  <label for="ib">lb</label>
-  <input type="radio" id="lb" name="uom" value="lb"><br>
-
-  <label for="kg">kg</label>
-  <input type="radio" id="kg" name="uom" value="kg"><br>
-<br/><br/><br/>
-
+<br/>
+<br/>
 
 
 
@@ -103,6 +86,10 @@ include $file_root.'bom/bom.php';
   <input type="radio" id="notactive" name="status" value="Not_Active"><br>
   <input type="submit" value="Submit">
 </form>
+</div>
+
+<br/>
+<br/>
 
 
 

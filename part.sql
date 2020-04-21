@@ -2,10 +2,10 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 21, 2020 at 04:37 AM
--- Server version: 10.4.6-MariaDB
--- PHP Version: 7.3.8
+-- Host: localhost:3306
+-- Generation Time: Apr 20, 2020 at 11:32 PM
+-- Server version: 10.2.25-MariaDB-cll-lve
+-- PHP Version: 7.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `triverus`
+-- Database: `triverus_triverus`
 --
 
 -- --------------------------------------------------------
@@ -934,7 +934,11 @@ INSERT INTO `part` (`partid`, `type`, `partnumber`, `description`, `note`, `Acti
 (905, 0, '0061425', 'PROCEDURE, ELECTRICAL INSTALL, MCRRS', 'import', 'yes', 'ea'),
 (906, 0, '1279N81', 'WEATHER=-RESISTANT HIGH TEM SILLICONE FOAM STRIP 3/4 WIDE, 3/8 THICK , 10 LONG', 'import', 'yes', 'ea'),
 (907, 2, '0061457', 'WELDMENT, TANK TOP, MCV', 'new', 'yes', 'ea'),
-(908, 1, '0061550', '	ASSEMBLY, 488C INLINE PTO_ CREEPER DRIVE', 'Added from PN tool', 'yes', 'ea');
+(908, 1, '0061550', '	ASSEMBLY, 488C INLINE PTO_ CREEPER DRIVE', 'Added from PN tool', 'yes', 'ea'),
+(909, 0, '0061622', 'PLATE, BAFFLE, HYDRAULIC TANK, FMV', '', 'yes', 'ea'),
+(910, 1, '0060800', 'ASSEMBLY, MCRRS', 'Main Assembly', 'yes', 'ea'),
+(911, 0, '0061747', 'PLATE, ROLLED ENDS, BLOWER BELT COVER, FMV', '', 'yes', 'ea'),
+(912, 1, '0061759', 'ASSEMBLY, BELT TENSIONER, BLOWER MOTOR MOUNT, FMV', 'Ha Ha', 'yes', 'ea');
 
 --
 -- Indexes for dumped tables
@@ -954,7 +958,7 @@ ALTER TABLE `part`
 -- AUTO_INCREMENT for table `part`
 --
 ALTER TABLE `part`
-  MODIFY `partid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=909;
+  MODIFY `partid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=913;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
